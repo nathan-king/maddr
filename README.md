@@ -6,6 +6,7 @@ Parse “structured markdown” (`.mdr`) into a JSON-serializable object structu
 - A **field** starts with a line like `@title`
 - Field content is the block of lines that follows the field label, up to the next `@field` or `$[section]`
 - Field content is typically indented for readability (indentation is optional, but recommended so it’s visually clear what belongs to a field)
+- A **subsection** is written as `$[parent:section]` like `$[hero:features]`. It can also be writen with the shorthand `$[:section]`.
 
 ## Why maddr?
 
@@ -34,12 +35,9 @@ $[hero]
 @subtitle
   Use **.mdr** to keep markdown readable _and_ structured.
 
-$[features]
-@item
+$[hero:features]
   - Fast
-@item
   - Simple
-@item
   - Framework-agnostic
 ```
 
@@ -75,8 +73,8 @@ export default function App() {
       </header>
 
       <ul>
-        {featureItems.map((li, i) => (
-          <li key={i}>{li}</li>
+        {featureItems.map((item, i) => (
+          <li key={i}>{item}</li>
         ))}
       </ul>
     </main>

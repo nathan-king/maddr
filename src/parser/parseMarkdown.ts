@@ -1,65 +1,39 @@
+import parseTree from "./parseTree";
 import { ParsedDocument } from ".";
 
-const CONTAINER_REGEX = /^\$\[([a-zA-Z][\w-]*)\]\s*$/;
-const ELEMENT_REGEX = /^@([a-zA-Z][\w-]*)\s*$/;
+function walk(value: any): any {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === "object" && value !== null) {
+    // List node
+    if (value.__type === "ul") {
+      return value.items.map((item: string) => `- ${item}`);
+    }
+
+    if (value.__type === "ol") {
+      return value.items.map((item: string, i: number) => `${i + 1}. ${item}`);
+    }
+
+    // Regular container
+    const result: any = {};
+    for (const [key, child] of Object.entries(value)) {
+      result[key] = walk(child);
+    }
+    return result;
+  }
+
+  return value;
+}
 
 export default async function parseMarkdown(
-  markdown: string
+  input: string
 ): Promise<ParsedDocument> {
-  const result: ParsedDocument = {};
-  let currentContainer: string | null = null;
-  let currentElement: string | null = null;
-  let buffer: string[] = [];
-
-  const lines = markdown.split(/\r?\n/);
-
-  function flushElement() {
-    if (!currentContainer || !currentElement) return;
-
-    const content = buffer.join("\n").trim();
-    if (!content) {
-      buffer = [];
-      return;
-    }
-
-    const container =
-      result[currentContainer] ?? (result[currentContainer] = {});
-    const existing = container[currentElement];
-
-    if (existing === undefined) {
-      container[currentElement] = content;
-    } else if (Array.isArray(existing)) {
-      existing.push(content);
-    } else {
-      container[currentElement] = [existing, content];
-    }
-
-    buffer = [];
-  }
-
-  for (const rawLine of lines) {
-    const line = rawLine.trimStart(); // 👈 THIS is the fix
-
-    const containerMatch = line.match(CONTAINER_REGEX);
-    if (containerMatch) {
-      flushElement();
-      currentContainer = containerMatch[1]!;
-      currentElement = null;
-      continue;
-    }
-
-    const elementMatch = line.match(ELEMENT_REGEX);
-    if (elementMatch) {
-      flushElement();
-      currentElement = elementMatch[1]!;
-      continue;
-    }
-
-    if (currentElement) {
-      buffer.push(rawLine); // keep original indentation for markdown
-    }
-  }
-  flushElement();
-
-  return result;
+  const tree = await parseTree(input);
+  return walk(tree);
 }

@@ -1,23 +1,40 @@
 import { markdownToText } from "../utils";
-import parseMarkdown from "./parseMarkdown";
-import { ParsedDocument, ParsedContainer } from ".";
+import parseTree from "./parseTree";
+import { ParsedDocument } from ".";
+
+async function walk(value: any): Promise<any> {
+  // 🔹 list node: { __type, items }
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    "__type" in value &&
+    Array.isArray((value as any).items)
+  ) {
+    return Promise.all((value as any).items.map(walk));
+  }
+
+  if (typeof value === "string") {
+    return markdownToText(value);
+  }
+
+  if (Array.isArray(value)) {
+    return Promise.all(value.map(walk));
+  }
+
+  if (typeof value === "object" && value !== null) {
+    const result: any = {};
+    for (const [key, child] of Object.entries(value)) {
+      result[key] = await walk(child);
+    }
+    return result;
+  }
+
+  return value;
+}
 
 export default async function parseRaw(
   markdown: string
 ): Promise<ParsedDocument> {
-  const doc = await parseMarkdown(markdown);
-  const result: ParsedDocument = {};
-
-  for (const [containerName, container] of Object.entries(doc)) {
-    const rendered: ParsedContainer = {};
-
-    for (const [elementName, value] of Object.entries(container)) {
-      rendered[elementName] = Array.isArray(value)
-        ? await Promise.all(value.map(markdownToText))
-        : await markdownToText(value);
-    }
-
-    result[containerName] = rendered;
-  }
-  return result;
+  const doc = await parseTree(markdown);
+  return walk(doc);
 }

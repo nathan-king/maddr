@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { parseHtml, parseMarkdown, parseRaw } from "./parser";
+const mode = process.argv[2] ?? "md";
 
 console.log("maddr parser booted!");
 
@@ -27,4 +28,4 @@ async function demo(type: string) {
   }
 }
 
-demo("raw");
+demo(mode);

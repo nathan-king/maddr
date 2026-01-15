@@ -1,27 +1,37 @@
-import { ParsedDocument, ParsedContainer } from ".";
-import parseMarkdown from "./parseMarkdown";
+import parseMarkdown from "./parseTree";
 import { markdownToHtml } from "../utils";
+import { ParsedDocument } from ".";
 
-const CONTAINER_REGEX = /^\$\[([a-zA-Z][\w-]*)\]\s*$/;
-const ELEMENT_REGEX = /^@([a-zA-Z][\w-]*)\s*$/;
+async function walk(value: any): Promise<any> {
+  if (typeof value === "string") {
+    return markdownToHtml(value);
+  }
+
+  if (Array.isArray(value)) {
+    return Promise.all(value.map(walk));
+  }
+
+  if (typeof value === "object" && value !== null) {
+    if (value.__type === "ul" || value.__type === "ol") {
+      const tag = value.__type;
+      const items = value.items.map((i: string) => `<li>${i}</li>`).join("");
+      return `<${tag}>${items}</${tag}>`;
+    }
+
+    const result: any = {};
+    for (const [key, child] of Object.entries(value)) {
+      if (key === "__type") continue;
+      result[key] = await walk(child);
+    }
+    return result;
+  }
+
+  return value;
+}
 
 export default async function parseHtml(
   input: string
 ): Promise<ParsedDocument> {
   const doc = await parseMarkdown(input);
-  const rendered: ParsedDocument = {};
-
-  for (const [containerName, container] of Object.entries(doc)) {
-    const out: ParsedContainer = {};
-
-    for (const [elementName, value] of Object.entries(container)) {
-      out[elementName] = Array.isArray(value)
-        ? await Promise.all(value.map(markdownToHtml))
-        : await markdownToHtml(value);
-    }
-
-    rendered[containerName] = out;
-  }
-
-  return rendered;
+  return walk(doc);
 }
