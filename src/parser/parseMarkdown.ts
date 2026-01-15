@@ -1,23 +1,11 @@
-// Core structural parser for maddr.
-//
-// Parses custom container ($[container]) and element (@element) syntax
-// into a hierarchical document tree. Markdown content is preserved
-// as raw strings and rendered in a later phase.
-
-export type ElementValue = string | string[];
-
-export interface ParsedContainer {
-  [element: string]: ElementValue;
-}
-
-export interface ParsedDocument {
-  [container: string]: ParsedContainer;
-}
+import { ParsedDocument } from ".";
 
 const CONTAINER_REGEX = /^\$\[([a-zA-Z][\w-]*)\]\s*$/;
 const ELEMENT_REGEX = /^@([a-zA-Z][\w-]*)\s*$/;
 
-export default function parseStructure(markdown: string): ParsedDocument {
+export default async function parseMarkdown(
+  markdown: string
+): Promise<ParsedDocument> {
   const result: ParsedDocument = {};
   let currentContainer: string | null = null;
   let currentElement: string | null = null;
