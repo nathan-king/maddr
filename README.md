@@ -1,6 +1,6 @@
 # maddr
 
-Parse “structured markdown” (`.mdr`) into JSON by labeling **sections** and **fields**.
+Parse “structured markdown” (`.mdr`) into a JSON-serializable object structure by labeling **sections** and **fields**.
 
 - A **section** starts with a line like `$[hero]`
 - A **field** starts with a line like `@title`
@@ -12,6 +12,8 @@ Parse “structured markdown” (`.mdr`) into JSON by labeling **sections** and 
 Markdown is great for content, but awkward for structured data.
 maddr provides a minimal, readable syntax for extracting semantic
 content blocks from markdown without inventing a full DSL.
+
+Use maddr instead of frontmatter for multi-section content files.
 
 ## Install
 
@@ -27,25 +29,18 @@ npm i maddr
 $[hero]
 
 @title
-
-# Build docs from content files
+  # Build docs from content files
 
 @subtitle
-Use **.mdr** to keep markdown readable _and_ structured.
+  Use **.mdr** to keep markdown readable _and_ structured.
 
 $[features]
-
 @item
-
-- Fast
-
+  - Fast
 @item
-
-- Simple
-
+  - Simple
 @item
-
-- Framework-agnostic
+  - Framework-agnostic
 ```
 
 ## React (Vite)
