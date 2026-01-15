@@ -1,0 +1,6 @@
+$[hero]
+  @title 
+  # This is a title
+
+  @subtitle 
+  ## This is a subtitle
