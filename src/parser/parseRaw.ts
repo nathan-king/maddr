@@ -2,7 +2,9 @@ import { markdownToText } from "../utils";
 import parseMarkdown from "./parseMarkdown";
 import { ParsedDocument, ParsedContainer } from ".";
 
-export async function parseRaw(markdown: string): Promise<ParsedDocument> {
+export default async function parseRaw(
+  markdown: string
+): Promise<ParsedDocument> {
   const doc = await parseMarkdown(markdown);
   const result: ParsedDocument = {};
 

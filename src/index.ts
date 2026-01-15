@@ -1,21 +1,9 @@
-import { readFile } from "node:fs/promises";
-import parseMarkdown from "./parser/parseMarkdown";
-import parseHtml from "./parser/parseHtml";
-import { parseRaw } from "./parser/parseRaw";
+import { parseHtml, parseMarkdown, parseRaw } from "./parser";
 
-console.log("maddr parser booted!");
-
-const markdown = await readFile("demo.mdr", "utf8");
-
-const rendered = await parseHtml(markdown);
-const rendered2 = await parseMarkdown(markdown);
-const rendered3 = await parseRaw(markdown);
-
-console.log(JSON.stringify(rendered3, null, 2));
+export { parseRaw, parseMarkdown, parseHtml };
 
 export default {
   parseMarkdown,
   parseHtml,
+  parse: parseRaw,
 };
-
-export { parseMarkdown, parseHtml };

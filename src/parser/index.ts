@@ -1,5 +1,6 @@
-import { parseRaw } from "./parser/parseRaw";
-import { parseHtml } from "./parser/parseHtml";
+import parseHtml from "./parseHtml";
+import parseMarkdown from "./parseMarkdown";
+import parseRaw from "./parseRaw";
 
 export type ElementValue = string | string[];
 
@@ -11,9 +12,4 @@ export interface ParsedDocument {
   [container: string]: ParsedContainer;
 }
 
-export default {
-  parse: parseRaw,
-  parseHtml,
-};
-
-export { parseRaw, parseHtml };
+export { parseHtml, parseMarkdown, parseRaw };
