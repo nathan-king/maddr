@@ -1,21 +1,38 @@
 {
   "name": "maddr",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Semantic markdown parser with section and field syntax",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "pnpm tsx src/index.ts",
     "dev": "pnpm tsx watch src/index.ts",
     "demo": "pnpm tsx src/demo.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepublishOnly": "build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "markdown",
+    "parser",
+    "semantic",
+    "content",
+    "remark"
+  ],
+  "author": "Nathan King",
+  "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "devDependencies": {
     "@types/node": "^25.0.8",
-    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },

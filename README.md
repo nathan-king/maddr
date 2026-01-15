@@ -5,7 +5,13 @@ Parse “structured markdown” (`.mdr`) into JSON by labeling **sections** and 
 - A **section** starts with a line like `$[hero]`
 - A **field** starts with a line like `@title`
 - Field content is the block of lines that follows the field label, up to the next `@field` or `$[section]`
-- Field content should be indented for readability (the parser reads the lines as-is; indentation is a convention)
+- Field content should be indented for readability (indentation is optional and not required by the parser).
+
+## Why maddr?
+
+Markdown is great for content, but awkward for structured data.
+maddr provides a minimal, readable syntax for extracting semantic
+content blocks from markdown without inventing a full DSL.
 
 ## Install
 
