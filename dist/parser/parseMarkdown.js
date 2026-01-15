@@ -27,7 +27,8 @@ export default async function parseMarkdown(markdown) {
         }
         buffer = [];
     }
-    for (const line of lines) {
+    for (const rawLine of lines) {
+        const line = rawLine.trimStart(); // 👈 THIS is the fix
         const containerMatch = line.match(CONTAINER_REGEX);
         if (containerMatch) {
             flushElement();
@@ -42,7 +43,7 @@ export default async function parseMarkdown(markdown) {
             continue;
         }
         if (currentElement) {
-            buffer.push(line);
+            buffer.push(rawLine); // keep original indentation for markdown
         }
     }
     flushElement();

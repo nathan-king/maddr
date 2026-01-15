@@ -11,3 +11,6 @@ export async function markdownToText(md: string): Promise<string> {
   const file = await remark().use(strip).process(md);
   return String(file).trim();
 }
+
+export const toArray = <T>(v: T | T[] | undefined | null): T[] =>
+  v == null ? [] : Array.isArray(v) ? v : [v];

@@ -9,4 +9,5 @@ export async function markdownToText(md) {
     const file = await remark().use(strip).process(md);
     return String(file).trim();
 }
+export const toArray = (v) => v == null ? [] : Array.isArray(v) ? v : [v];
 //# sourceMappingURL=utils.js.map

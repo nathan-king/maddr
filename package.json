@@ -1,6 +1,6 @@
 {
   "name": "maddr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Semantic markdown parser with section and field syntax",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "demo": "pnpm tsx src/demo.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "prepublishOnly": "build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "markdown",
@@ -29,10 +29,16 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/useMaddr.d.ts",
+      "import": "./dist/react/useMaddr.js"
     }
   },
   "devDependencies": {
     "@types/node": "^25.0.8",
+    "@types/react": "^19.2.8",
+    "react": "^19.2.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },

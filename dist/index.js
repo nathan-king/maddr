@@ -1,8 +1,10 @@
 import { parseHtml, parseMarkdown, parseRaw } from "./parser";
-export { parseRaw, parseMarkdown, parseHtml };
+import { toArray } from "./utils";
+export { parseRaw, parseMarkdown, parseHtml, toArray };
 export default {
     parseMarkdown,
     parseHtml,
     parse: parseRaw,
+    toArray,
 };
 //# sourceMappingURL=index.js.map
